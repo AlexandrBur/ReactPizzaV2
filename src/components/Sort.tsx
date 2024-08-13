@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSort, setSort } from '../redux/slices/filterSlice.ts';
 
-export type SortItem = {
+type SortItem = {
   name: string;
   sortProperty: 'rating' | 'title' | 'price' | '-rating' | '-title' | '-price';
 }
