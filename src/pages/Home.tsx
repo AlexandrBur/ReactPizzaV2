@@ -8,11 +8,10 @@ import {
   setCategoryId,
   setCurrentPage,
   setFilters,
-  SortType,
 } from '../redux/slices/filterSlice.ts';
 
 import Categories from '../components/Categories.tsx';
-import Sort from '../components/Sort.tsx';
+import Sort, { sortList } from '../components/Sort.tsx';
 import PizzaBlock from '../components/PizzaBlock/index.tsx';
 import Skeleton from '../components/PizzaBlock/Skeleton.tsx';
 import Pagination from '../components/Pagination/index.tsx';
@@ -20,14 +19,6 @@ import { getPizzas, selectPizzaData } from '../redux/slices/pizzaSlice.ts';
 import { useAppDispatch } from '../redux/store.ts';
 
 const Home: React.FC = () => {
-  const sortList = [
-    { name: 'популярности (DESC)', sortProperty: 'rating' },
-    { name: 'популярности (ASC)', sortProperty: '-rating' },
-    { name: 'цене (DESC)', sortProperty: 'price' },
-    { name: 'цене (ASC)', sortProperty: '-price' },
-    { name: 'алфавиту (DESC)', sortProperty: 'title' },
-    { name: 'алфавиту (ASC)', sortProperty: '-title' },
-  ];
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -83,8 +74,6 @@ const Home: React.FC = () => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
       const sort = sortList.find((obj) => obj.sortProperty === params.sortProperty);
-      console.log(sort);
-      console.log(params);
 
       dispatch(
         setFilters({
@@ -107,8 +96,8 @@ const Home: React.FC = () => {
     isSearch.current = false;
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-  const pizzas = items.map((obj: any) => (
-      <PizzaBlock {...obj} />
+  const pizzas = items.map((obj: any, index) => (
+      <PizzaBlock {...obj} key={index} />
   ));
   const skeletons = [...new Array(8)].map((_, index) => <Skeleton key={index} />);
 

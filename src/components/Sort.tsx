@@ -2,29 +2,30 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSort, setSort } from '../redux/slices/filterSlice.ts';
 
+export type SortItem = {
+  name: string;
+  sortProperty: 'rating' | 'title' | 'price' | '-rating' | '-title' | '-price';
+}
+
+type PopupClick = MouseEvent & {
+  path: Node[];
+}
+
+export const sortList: SortItem[] = [
+  { name: 'популярности (DESC)', sortProperty: 'rating' },
+  { name: 'популярности (ASC)', sortProperty: '-rating' },
+  { name: 'цене (DESC)', sortProperty: 'price' },
+  { name: 'цене (ASC)', sortProperty: '-price' },
+  { name: 'алфавиту (DESC)', sortProperty: 'title' },
+  { name: 'алфавиту (ASC)', sortProperty: '-title' },
+];
+
 function Sort() {
   const dispatch = useDispatch();
   const sort = useSelector(selectSort);
   const sortRef = React.useRef<HTMLDivElement | null>(null);
 
-  type SortItem = {
-    name: string;
-    sortProperty: 'rating' | 'title' | 'price' | '-rating' | '-title' | '-price'; //  'rating' | 'title' | 'price' | '-rating' | '-title' | '-price' // string;
-  }
-
-  type PopupClick = MouseEvent & {
-    path: Node[];
-  }
-
   const [open, setOpen] = React.useState(false);
-  const list: SortItem[] = [
-    { name: 'популярности (DESC)', sortProperty: 'rating' },
-    { name: 'популярности (ASC)', sortProperty: '-rating' },
-    { name: 'цене (DESC)', sortProperty: 'price' },
-    { name: 'цене (ASC)', sortProperty: '-price' },
-    { name: 'алфавиту (DESC)', sortProperty: 'title' },
-    { name: 'алфавиту (ASC)', sortProperty: '-title' },
-  ];
 
   const onClickListItem = (obj: SortItem) => {
     dispatch(setSort(obj));
@@ -64,7 +65,7 @@ function Sort() {
       {open && (
         <div className="sort__popup">
           <ul>
-            {list.map((obj, index) => (
+            {sortList.map((obj, index) => (
               <li
                 key={index}
                 onClick={() => onClickListItem(obj)}
